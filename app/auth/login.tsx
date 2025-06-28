@@ -15,8 +15,8 @@ const LoginScreen = () => {
   const router = useRouter();
   const [isPressed, setIsPressed] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
-  const [usuario, setUsuario] = useState("JOOREPA");
-  const [password, setPassword] = useState("123456");
+  const [usuario, setUsuario] = useState("");
+  const [password, setPassword] = useState("");
   const { login, error } = useAuth();
 
   const handleLogin = async () => {

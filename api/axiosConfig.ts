@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://192.168.100.8:8080/api",
+  baseURL:
+    "https://backend-rg-server-cjb7grcvatgnbcg0.canadacentral-01.azurewebsites.net/api",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
