@@ -149,12 +149,14 @@ export default function DetallePedidoScreen() {
             <Picker
               selectedValue={estado}
               onValueChange={(itemValue) => setEstado(Number(itemValue))}
+              itemStyle={{ color: "black" }}
             >
               {estadosDisponibles.map((estado) => (
                 <Picker.Item
                   label={estado.label}
                   value={estado.value}
                   key={estado.value}
+                  color="black"
                 />
               ))}
             </Picker>
