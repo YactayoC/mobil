@@ -1,3 +1,4 @@
+import { useAuth } from "@/hooks/useAuth";
 import { usePedido } from "@/hooks/usePedido";
 import { Pedido } from "@/interfaces/pedido";
 import { useFocusEffect, useRouter } from "expo-router";
@@ -24,16 +25,18 @@ const estadoColor: {
   ASIGNADO: "#9b59b6",
 };
 
-const idOperario = "1";
-
 const OrderScreen = () => {
   const router = useRouter();
   const { pedidos, loading, error, obtenerPedidos } = usePedido();
+  const { user, isAuthenticated } = useAuth();
 
   useFocusEffect(
     useCallback(() => {
-      obtenerPedidos(idOperario);
-    }, [])
+      if (user.user) {
+        console.log("llamando a obtenerPedidos con user:", user.user);
+        obtenerPedidos(user!.user!.toString());
+      }
+    }, [user.user])
   );
 
   const renderItem = ({ item }: { item: Pedido }) => (
@@ -74,7 +77,21 @@ const OrderScreen = () => {
           <Text style={styles.logout}>Cerrar sesión</Text>
         </Pressable>
       </View>
-      {loading ? (
+
+      {/* Verificar si el usuario está autenticado */}
+      {!isAuthenticated ? (
+        <View style={styles.notAuthenticatedContainer}>
+          <Text style={styles.notAuthenticatedText}>
+            Usuario no autenticado
+          </Text>
+          <Pressable
+            style={styles.loginButton}
+            onPress={() => router.replace("/auth/login")}
+          >
+            <Text style={styles.loginButtonText}>Ir a Login</Text>
+          </Pressable>
+        </View>
+      ) : loading ? (
         <ActivityIndicator
           size="large"
           color="#007bff"
@@ -182,5 +199,28 @@ const styles = StyleSheet.create({
   arrow: {
     fontSize: 24,
     color: "#aaa",
+  },
+  notAuthenticatedContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  notAuthenticatedText: {
+    fontSize: 18,
+    color: "#666",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  loginButton: {
+    backgroundColor: "#007bff",
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  loginButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "500",
   },
 });
