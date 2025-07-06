@@ -24,6 +24,30 @@ const estadosDisponibles = [
   { label: "ASIGNADO", value: 5 },
 ];
 
+const getEstadosDisponibles = (estadoActual: number) => {
+  switch (estadoActual) {
+    case 1:
+      return estadosDisponibles;
+
+    case 5:
+      return estadosDisponibles.filter((estado) => estado.value !== 1);
+
+    case 2:
+      return estadosDisponibles.filter(
+        (estado) => estado.value !== 1 && estado.value !== 5
+      );
+
+    case 3:
+      return estadosDisponibles.filter((estado) => estado.value === 3);
+
+    case 4:
+      return estadosDisponibles.filter((estado) => estado.value === 4);
+
+    default:
+      return estadosDisponibles;
+  }
+};
+
 export default function DetallePedidoScreen() {
   const { id } = useLocalSearchParams();
   const { obtenerPedidoPorId, error, loading, actualizarPedidoConImagenes } =
@@ -151,11 +175,11 @@ export default function DetallePedidoScreen() {
               onValueChange={(itemValue) => setEstado(Number(itemValue))}
               itemStyle={{ color: "black" }}
             >
-              {estadosDisponibles.map((estado) => (
+              {getEstadosDisponibles(estadoOriginal).map((estadoItem) => (
                 <Picker.Item
-                  label={estado.label}
-                  value={estado.value}
-                  key={estado.value}
+                  label={estadoItem.label}
+                  value={estadoItem.value}
+                  key={estadoItem.value}
                   color="black"
                 />
               ))}
